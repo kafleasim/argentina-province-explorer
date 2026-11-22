@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -236,6 +236,7 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&m.open){m.open=fals
 <section id="stat" class="hide">
 <div class="controls"><label>Statute measure<select id="st_sel"></select></label></div>
 <div id="st_map"></div>
+<p class="note"><b>Coding check open (22 Nov 2026):</b> Neuquén, Río Negro, Santa Cruz and Tierra del Fuego share the 1958 national statute but are coded differently on rules A3, B3, B4, C1, D3 and D4. These may be provincial amendments or coding errors.</p>
 <h2>What each province's statute says: 22 coded rules and the model-statute indices</h2>
 <p class="note">Source: group coding of the 24 provincial teacher statutes (qualitative_codebook.xlsx), primary grade teacher unless stated. Index cells: 0–100, darker = closer to the model statute. Rule cells: shaded by the same 0–1 score (darker = closer to the model statute; plain = direction not set or not in the indices); ● = yes, ○ = no, – = not coded. Click a row to select the province, a column heading to map that rule.</p>
 <div class="tscroll" id="st_grid"></div>
@@ -318,7 +319,7 @@ const YEARS={p6:[2016,2018,2021,2022,2023,2025],s56:[2016,2024]};
 const GRP=[['all|1','All students'],['school_sector|1','Public schools'],['school_sector|2','Private schools'],['rural|0','Urban schools'],['rural|1','Rural schools'],['sex_gender|2','Girls'],['sex_gender|1','Boys'],['ses_group|1','Lowest SES group'],['ses_group|2','Middle SES group'],['ses_group|3','Highest SES group']];
 const MET={satisfactory:'satisfactory or advanced (%)',below_basic:'below basic (%)',mean_score:'mean score',disp:'school spread',ses_adj:'satisfactory or advanced vs the share expected from the SES mix (pts)'};
 const SUB={l:'Language',m:'Mathematics'};
-const IND={tenured:['Tenured (titular)','Access & stability'],interim:['Interim / provisional','Access & stability'],substitute:['Substitute (suplente)','Access & stability'],contract_other:['Contract / other','Access & stability'],school_le5:['5 years or less at this school','Access & stability'],dir_school_le5:['Director: 5 years or less at this school','Access & stability'],exp_le5:['5 years or less in teaching','Progress & recognition'],exp_gt20:['More than 20 years in teaching','Progress & recognition'],age_under30:['Under 30 years old','Progress & recognition'],age_50plus:['50 or older','Progress & recognition'],female:['Women','Profile'],other_school:['Also works at another school','Conditions & training'],outside_job:['Also works outside education','Conditions & training'],trained_lang:['Training in language, last 3 years','Conditions & training'],trained_math:['Training in maths, last 3 years','Conditions & training'],dir_trained:['Director: any training, last 3 years','Conditions & training'],univ_degree:['University or postgraduate degree','Conditions & training'],profesorado:['Holds a teaching degree (profesorado)','Conditions & training'],long_training:['Initial training of 4+ years','Conditions & training'],teaching_qual:['Holds a teaching qualification','Conditions & training']};
+const IND={tenured:['Tenured (titular)','Access & stability'],interim:['Interim / provisional','Access & stability'],substitute:['Substitute (suplente)','Access & stability'],contract_other:['Contract / other','Access & stability'],school_le5:['5 years or less at this school','Access & stability'],dir_school_le5:['Director: 5 years or less at this school','Access & stability'],exp_le5:['5 years or less in teaching','Progress & recognition'],exp_gt20:['More than 20 years in teaching','Progress & recognition'],age_under30:['Under 30 years old','Progress & recognition'],age_50plus:['50 or older','Progress & recognition'],female:['Women','Profile'],other_school:['Also works at another school','Conditions & training'],outside_job:['Also works outside education','Conditions & training'],trained_lang:['Training in language, last 3 years','Conditions & training'],trained_math:['Training in maths, last 3 years','Conditions & training'],dir_trained:['Director trained in management or pedagogy (last 3 years)','Conditions & training'],univ_degree:['University or postgraduate degree','Conditions & training'],profesorado:['Holds a teaching degree (profesorado)','Conditions & training'],long_training:['Initial training of 4+ years','Conditions & training'],teaching_qual:['Holds a teaching qualification','Conditions & training']};
 const NOTE=y=>y==2021?'2021: unresolved against the original official report — interpret with care.':y==2022?'2022: sample, not census.':'';
 const fmt=(v,d=1)=>v==null||isNaN(v)?'–':(+v).toFixed(d);
 const sgn=(v,d=1)=>v==null||isNaN(v)?'–':(v>=0?'+':'')+fmt(v,d);
@@ -528,7 +529,7 @@ function wireModel(d){const m=d.querySelector('.msel');if(!m)return;m.ontoggle=(
 /* plain-language read-out (right-hand panel): verdict, 100% bar, coefficients, group means, mini scatter */
 function lawBrief(L,vals,o){
   const ids=modelIds(),F=lawFit(ids,vals),isPct=o.unit=='%',vf=v=>v==null?'–':fmt(v)+(isPct?'%':''),gu=isPct?' pts':'',multi=F.Ls.length>1,one=F.Ls[0];
-  let h=`<div class="lawbrief"><div class="lead" style="margin-top:14px;color:var(--ink);font-weight:600">Does ${multi?'this set of statute measures':`“${(one||L).short}”`} explain this outcome?</div>${modelPicker()}`;
+  let h=`<div class="lawbrief"><p class="note"><b>Coding check open:</b> Neuquén, Río Negro, Santa Cruz and Tierra del Fuego share the 1958 national statute but are coded differently on A3, B3, B4, C1, D3 and D4. Read statute regressions with care.</p><div class="lead" style="margin-top:14px;color:var(--ink);font-weight:600">Does ${multi?'this set of statute measures':`“${(one||L).short}”`} explain this outcome?</div>${modelPicker()}`;
   if(!F.m){h+=`<p class="note">${!F.Ls.length?`Not tested: ${L.v&&L.v.why?L.v.why:'too little variation'} across provinces, so it cannot explain differences between them (map only). Tick other measures above to build a model.`:'Too few provinces for this many terms: remove a measure.'}</p></div>`;return {html:h,wire:d=>wireModel(d)}}
   const k=F.terms.length,r2=F.m.r2,adj=F.m.adj,same=(a,b)=>Math.sign(a)==Math.sign(b);
   const sesOk=F.fpS==null?null:F.fpS<.1&&(k>1||same(F.mS.b[1],F.m.b[1]));
