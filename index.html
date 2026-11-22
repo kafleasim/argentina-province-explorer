@@ -106,8 +106,27 @@ td.pcg{background:rgba(47,125,91,.17)}td.pcb{background:rgba(181,68,43,.15)}
 .pct td,.pct th{white-space:nowrap}.pct td:first-child{white-space:normal;min-width:230px}
 .mcap{min-height:66px}
 </style>
+<style id="site-css">
+.sitebar{max-width:1180px;margin:auto;padding:10px 16px 0;display:flex;align-items:center;gap:10px}
+.sitemenu{position:relative}
+.sitemenu>summary{list-style:none;cursor:pointer;width:44px;height:40px;display:grid;place-items:center;font-size:22px;line-height:1;border:1px solid var(--line);border-radius:6px;color:var(--ink)}
+.sitemenu>summary::-webkit-details-marker{display:none}
+.sitepanel{position:absolute;top:46px;left:0;z-index:20;width:260px;padding:6px;background:var(--bg);border:1px solid var(--line);border-radius:8px;box-shadow:0 6px 20px rgba(0,0,0,.18)}
+.sitepanel a{display:block;padding:10px;border-radius:5px;color:var(--ink);text-decoration:none}
+.sitepanel a.child{padding-left:26px;font-size:13px}
+.sitepanel a:hover,.sitepanel a[aria-current]{background:var(--panel)}
+.sitepanel a[aria-current]{font-weight:600}
+.sitename{font-size:13px;color:var(--muted)}
+.reporttabs{display:flex;gap:4px;flex-wrap:wrap;border-bottom:1px solid var(--line);margin:14px 0 18px}
+.reporttabs a{padding:9px 12px;color:var(--muted);text-decoration:none;border-bottom:3px solid transparent}
+.reporttabs a[aria-current]{color:var(--ink);border-color:var(--c1);font-weight:600}
+@media print{.sitebar,.reporttabs{display:none}}
+</style>
 </head>
 <body>
+<div class="sitebar"><details class="sitemenu"><summary aria-label="Open the site menu" title="Menu">&#9776;</summary><div class="sitepanel" role="navigation" aria-label="Site"><a href="index.html" aria-current="page">Province explorer</a><a href="report/index.html"><b>Report</b></a><a href="report/index.html" class="child">Diagnostic tree</a><a href="report/analysis.html" class="child">Regressions and findings</a></div></details><span class="sitename">Province explorer</span></div><script>(()=>{const m=document.querySelector('.sitemenu');
+document.addEventListener('click',e=>{if(!m.contains(e.target))m.open=false});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&m.open){m.open=false;m.querySelector('summary').focus()}})})()</script>
 <header>
 <button class="theme" id="theme">Light / dark</button>
 <h1>Argentina province explorer</h1>
